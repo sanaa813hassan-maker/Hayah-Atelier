@@ -1,27 +1,31 @@
 {% extends "layout.html" %}
 
+{% block title %}تأكيد الحذف{% endblock %}
+
 {% block content %}
-<div class="fade-in" style="min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+<div class="fade-in d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="custom-card text-center shadow-lg" style="max-width: 450px; border-top: 5px solid #FF453A;">
+        <div class="custom-card-body">
+            <i class="fa-solid fa-triangle-exclamation fa-3x text-danger mb-3"></i>
+            <h2 class="mb-3">تأكيد حذف نهائي</h2>
+            <p class="text-muted">
+                أنت على وشك حذف الموظف/الشريك:
+                <strong class="d-block mt-2 mb-2">{{ employee_name }}</strong>
+                هذا الإجراء سيقوم بحذف كل السجلات المرتبطة به ولا يمكن التراجع عنه.
+            </p>
 
-    <div class="glass-card" style="text-align: center; border-top: 5px solid var(--danger); max-width: 400px; width: 100%;">
-        <i class="fa-solid fa-triangle-exclamation" style="font-size: 50px; color: var(--danger); margin-bottom: 20px;"></i>
+            <form method="POST" class="mt-4">
+                <div class="form-group">
+                    <label for="password">لتأكيد الحذف، يرجى إدخال كلمة مرور المدير:</label>
+                    <input type="password" id="password" name="password" class="form-control text-center" required placeholder="••••••••">
+                </div>
 
-        <h2 style="margin-bottom: 10px;">حذف الموظف نهائياً</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 20px;">
-            أنت على وشك حذف <strong>{{ employee_name }}</strong>.<br>
-            هذا الإجراء لا يمكن التراجع عنه.
-        </p>
-
-        <form method="POST">
-            <label class="text-muted" style="text-align: right;">تأكيد كلمة مرور المدير:</label>
-            <input type="password" name="password" placeholder="كلمة المرور..." required style="text-align: center;">
-
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <a href="{{ url_for('employee_report') }}" class="btn" style="background: rgba(255,255,255,0.1);">إلغاء</a>
-                <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
-            </div>
-        </form>
+                <div class="d-flex justify-content-center mt-4">
+                    <a href="{{ url_for('employee_report') }}" class="btn btn-secondary ml-2">إلغاء والعودة</a>
+                    <button type="submit" class="btn btn-danger">أنا متأكد، قم بالحذف</button>
+                </div>
+            </form>
+        </div>
     </div>
-
 </div>
 {% endblock %}

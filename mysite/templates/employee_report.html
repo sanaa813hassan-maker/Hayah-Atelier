@@ -1,91 +1,105 @@
 {% extends "layout.html" %}
 
+{% block title %}تقرير الموظفين والشركاء{% endblock %}
+
 {% block content %}
 <div class="fade-in">
-    <h2 style="text-align: center; margin-bottom: 20px;">أداء الموظفين والرواتب</h2>
+    <h1 style="text-align: center; margin-bottom: 20px;">تقرير الموظفين والشركاء</h1>
 
+    <div class="custom-card-container" style="max-width: 900px; margin: auto;">
     {% for name, data in employees.items() %}
-    <div class="glass-card" style="position: relative; overflow: hidden;">
-
-        <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 5px;
-             background: {{ 'var(--accent-pink)' if data.employee_type == 'Owner' else 'var(--primary-color)' }};">
-        </div>
-
-        <div style="margin-right: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin: 0;">
-                    <i class="fa-solid fa-user-tie" style="color: var(--text-secondary); margin-left: 8px;"></i>
-                    {{ name }}
-                </h3>
-                <span style="font-size: 11px; padding: 4px 10px; border-radius: 15px;
-                      background: rgba(255,255,255,0.1); color: var(--text-secondary);">
+        <div class="custom-card mb-4" style="border-left: 5px solid {{ '#C65276' if data.employee_type == 'Owner' else '#007AFF' }};">
+            <div class="custom-card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ name }}</h5>
+                <span class="badge {{ 'badge-secondary' if data.employee_type == 'Owner' else 'badge-primary' }}">
                     {{ 'شريك / مالك' if data.employee_type == 'Owner' else 'موظف' }}
                 </span>
             </div>
+            <div class="custom-card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="stat-box">
+                            <div class="stat-title">عدد الحجوزات المسجلة</div>
+                            <div class="stat-value">{{ data.rentals_count }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="stat-box">
+                            <div class="stat-title">إجمالي قيمة المبيعات</div>
+                            <div class="stat-value" style="color: #30D158;">{{ "{:,.2f}".format(data.rentals_value) }} ج</div>
+                        </div>
+                    </div>
+                </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; text-align: center;">
-                    <div style="color: var(--text-secondary); font-size: 11px;">عدد الحجوزات</div>
-                    <div style="font-weight: bold; font-size: 18px;">{{ data.rentals_count }}</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; text-align: center;">
-                    <div style="color: var(--text-secondary); font-size: 11px;">إجمالي المبيعات</div>
-                    <div style="font-weight: bold; font-size: 18px; color: var(--success);">{{ data.rentals_value }} ج</div>
-                </div>
+                {% if data.employee_type == 'Employee' %}
+                <hr>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        الراتب الأساسي
+                        <span>{{ "{:,.2f}".format(data.base_salary) }} ج</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        إجمالي المدفوعات (رواتب)
+                        <span class="text-success">-{{ "{:,.2f}".format(data.total_paid) }} ج</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        إجمالي الخصومات
+                        {% if data.total_deductions > 0 %}
+                            <a href="#" class="text-danger">-{{ "{:,.2f}".format(data.total_deductions) }} ج (التفاصيل)</a>
+                        {% else %}
+                            <span class="text-danger">-0.00 ج</span>
+                        {% endif %}
+                    </li>
+                     <li class="list-group-item d-flex justify-content-between align-items-center">
+                        أيام الغياب المسجلة
+                        <span class="{{ 'text-danger font-weight-bold' if data.absent_days > 0 else '' }}">{{ data.absent_days }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info">
+                        <strong>الرصيد المستحق للموظف</strong>
+                        <strong class="h5">{{ "{:,.2f}".format(data.remaining_salary) }} ج</strong>
+                    </li>
+                </ul>
+                {% else %}
+                <hr>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        إجمالي المسحوبات من الأرباح
+                        <span class="h5" style="color: #C65276;">{{ "{:,.2f}".format(data.total_withdrawals) }} ج</span>
+                    </li>
+                </ul>
+                {% endif %}
+
             </div>
-
-            {% if data.employee_type == 'Employee' %}
-            <div style="border-top: 1px solid var(--glass-border); padding-top: 10px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span class="text-muted">الراتب الأساسي</span>
-                    <span>{{ data.base_salary }} ج</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span class="text-muted">مدفوعات سابقة</span>
-                    <span style="color: var(--success);">-{{ data.total_paid }} ج</span>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span class="text-muted">خصومات / جزاءات</span>
-                    {% if data.total_deductions > 0 %}
-                        <a href="{{ url_for('deductions_report', employee_name=name) }}" style="color: var(--danger); text-decoration: underline;">
-                            -{{ data.total_deductions }} ج (التفاصيل)
-                        </a>
-                    {% else %}
-                        <span>0 ج</span>
-                    {% endif %}
-                </div>
-
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span class="text-muted">أيام الغياب</span>
-                    <span style="{{ 'color: var(--danger); font-weight:bold;' if data.absent_days > 0 else '' }}">
-                        {{ data.absent_days }} أيام
-                    </span>
-                </div>
-
-                <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                    <span style="font-size: 14px;">المتبقي له:</span>
-                    <span style="font-size: 20px; font-weight: bold; color: {{ 'var(--success)' if data.remaining_salary > 0 else 'white' }};">
-                        {{ data.remaining_salary }} ج
-                    </span>
-                </div>
-            </div>
-            {% else %}
-            <div style="border-top: 1px solid var(--glass-border); padding-top: 10px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span class="text-muted">إجمالي المسحوبات</span>
-                    <span style="color: var(--accent-pink); font-weight: bold; font-size: 18px;">{{ data.total_withdrawals }} ج</span>
-                </div>
-            </div>
-            {% endif %}
-
-            <div style="text-align: left; margin-top: 15px;">
-                <a href="{{ url_for('confirm_delete_employee', employee_name=name) }}" style="color: var(--danger); font-size: 12px;">
-                    <i class="fa-solid fa-trash"></i> حذف من السيستم
+            <div class="custom-card-footer text-left">
+                 <a href="{{ url_for('confirm_delete_employee', employee_id=data.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('هل أنت متأكد من حذف هذا الشخص؟ سيتم حذف كل البيانات المرتبطة به.')">
+                    <i class="fa-solid fa-trash-alt"></i> حذف من النظام
                 </a>
             </div>
         </div>
-    </div>
     {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('employees_menu') }}" class="btn btn-secondary">العودة لقائمة الموظفين</a>
+    </div>
 </div>
+
+<style>
+.stat-box {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+.stat-title {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+</style>
+
 {% endblock %}

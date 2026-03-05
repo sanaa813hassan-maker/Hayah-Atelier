@@ -3,3 +3,5 @@ werkzeug
 requests
 pytz
 pillow
+Flask-SQLAlchemy
+psycopg2-binary
