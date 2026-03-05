@@ -1,31 +1,55 @@
 {% extends "layout.html" %}
 
+{% block title %}
+إضافة مالك/شريك أو موظف
+{% endblock %}
+
 {% block content %}
 <div class="fade-in">
-    <h2 style="text-align: center; margin-bottom: 20px;">إضافة فرد جديد للطاقم</h2>
+    <h1 style="text-align: center; margin-bottom: 20px;">إضافة مالك/شريك أو موظف</h1>
 
-    <form method="POST">
-        <div class="glass-card">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <i class="fa-solid fa-user-plus" style="font-size: 40px; color: var(--primary-color);"></i>
+    <form method="POST" class="custom-form-container">
+        <div class="custom-card">
+            <div class="custom-card-header">
+                يرجى ملء البيانات التالية
             </div>
+            <div class="custom-card-body">
+                <div class="form-group">
+                    <label for="employee_name">الاسم الثلاثي</label>
+                    <input type="text" class="form-control" id="employee_name" name="employee_name" placeholder="مثال: محمد أحمد علي" required>
+                </div>
 
-            <label class="text-muted">الاسم الثلاثي</label>
-            <input type="text" name="employee_name" placeholder="اسم الموظف / الشريك" required>
+                <div class="form-group">
+                    <label for="employee_type">الصفة (الدور)</label>
+                    <select class="form-control" id="employee_type" name="employee_type">
+                        <option value="Employee">موظف (له راتب وحضور وانصراف)</option>
+                        <option value="Owner">مالك/شريك (له مسحوبات من الأرباح)</option>
+                    </select>
+                </div>
 
-            <label class="text-muted">الراتب الأساسي (للموظفين فقط)</label>
-            <input type="number" name="base_salary" placeholder="0 إذا كان شريك" value="0">
-
-            <label class="text-muted">الصفة (الدور)</label>
-            <select name="employee_type">
-                <option value="Employee">موظف (راتب + حضور)</option>
-                <option value="Owner">مالك/شريك (مسحوبات فقط)</option>
-            </select>
+                <div class="form-group" id="salary_field">
+                    <label for="base_salary">الراتب الأساسي (للموظفين فقط)</label>
+                    <input type="number" class="form-control" id="base_salary" name="base_salary" placeholder="اتركه 0 إذا كان مالك/شريك" value="0">
+                </div>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">
-            <i class="fa-solid fa-check"></i> حفظ البيانات
-        </button>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> إضافة الفرد</button>
+            <a href="{{ url_for('employees_menu') }}" class="btn btn-secondary">إلغاء</a>
+        </div>
     </form>
+
+    <script>
+        document.getElementById('employee_type').addEventListener('change', function() {
+            var salaryField = document.getElementById('salary_field');
+            if (this.value === 'Owner') {
+                salaryField.style.display = 'none';
+                document.getElementById('base_salary').value = 0;
+            } else {
+                salaryField.style.display = 'block';
+            }
+        });
+    </script>
 </div>
 {% endblock %}
