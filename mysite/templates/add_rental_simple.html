@@ -1,0 +1,31 @@
+{% extends "base_simple.html" %}
+
+{% block title %}إضافة حجز جديد{% endblock %}
+
+{% block content %}
+<h2>إضافة حجز جديد</h2>
+<form method="POST">
+    <div class="form-group">
+        <label for="client_name">اسم العميلة</label>
+        <input type="text" class="form-control" id="client_name" name="client_name" required>
+    </div>
+    <div class="form-group">
+        <label for="phone">رقم الهاتف</label>
+        <input type="tel" class="form-control" id="phone" name="phone">
+    </div>
+    <div class="form-group">
+        <label for="dress_name">اسم الفستان</label>
+        <input type="text" class="form-control" id="dress_name" name="dress_name" required>
+    </div>
+    <div class="form-group">
+        <label for="price">السعر</label>
+        <input type="number" class="form-control" id="price" name="price" required>
+    </div>
+    <div class="form-group">
+        <label for="due_date">تاريخ الاستلام</label>
+        <input type="date" class="form-control" id="due_date" name="due_date" required>
+    </div>
+    <button type="submit" class="btn btn-primary">إضافة الحجز</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">إلغاء</a>
+</form>
+{% endblock %}

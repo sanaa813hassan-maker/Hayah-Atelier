@@ -1,0 +1,15 @@
+{% extends "base_simple.html" %}
+
+{% block title %}إضافة موظف جديد{% endblock %}
+
+{% block content %}
+<h2>إضافة موظف جديد</h2>
+<form method="POST">
+    <div class="form-group">
+        <label for="employee_name">اسم الموظف</label>
+        <input type="text" class="form-control" id="employee_name" name="employee_name" required>
+    </div>
+    <button type="submit" class="btn btn-primary">إضافة الموظف</button>
+    <a href="{{ url_for('employees_page') }}" class="btn btn-secondary">إلغاء</a>
+</form>
+{% endblock %}

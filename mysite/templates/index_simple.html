@@ -1,0 +1,48 @@
+{% extends "base_simple.html" %}
+
+{% block title %}الرئيسية - أتيليه حياه{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2>قائمة الحجوزات</h2>
+    <a href="{{ url_for('add_rental') }}" class="btn btn-primary mb-3">إضافة حجز جديد</a>
+</div>
+
+<table class="table table-striped table-bordered text-right">
+    <thead class="thead-dark">
+        <tr>
+            <th>اسم العميلة</th>
+            <th>رقم الهاتف</th>
+            <th>اسم الفستان</th>
+            <th>السعر</th>
+            <th>تاريخ الاستلام</th>
+            {% if is_manager() %}
+            <th>إجراءات</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for rental in rentals %}
+        <tr>
+            <td>{{ rental.client_name }}</td>
+            <td>{{ rental.phone }}</td>
+            <td>{{ rental.dress_name }}</td>
+            <td>{{ rental.price }}</td>
+            <td>{{ rental.due_date }}</td>
+            {% if is_manager() %}
+            <td>
+                <a href="{{ url_for('edit_rental', rental_id=rental.id) }}" class="btn btn-sm btn-warning">تعديل</a>
+                <form action="{{ url_for('delete_rental', rental_id=rental.id) }}" method="POST" style="display:inline-block;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('هل أنت متأكد من حذف هذا الحجز؟');">حذف</button>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="{% if is_manager() %}6{% else %}5{% endif %}" class="text-center">لا توجد حجوزات حاليًا.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
