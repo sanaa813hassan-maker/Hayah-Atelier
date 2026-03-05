@@ -22,15 +22,11 @@ app = Flask(__name__, template_folder='mysite/templates', static_folder='mysite/
 app.secret_key = 'hayah_atelier_secret_key_12345'
 
 # --- 2. إعداد قاعدة البيانات ---
+# This section is modified to fail loudly if the database URL isn't set,
+# which is a requirement for read-only filesystems like Cloudflare Pages.
 db_uri = os.environ.get('POSTGRES_URL')
 if not db_uri:
-    if os.environ.get('VERCEL'):
-        raise RuntimeError("FATAL: The POSTGRES_URL environment variable is not set on Vercel.")
-    else:
-        print("WARNING: POSTGRES_URL not found. Falling back to local SQLite database.")
-        # Make sure the local database path is also relative to the project root
-        db_uri = f"sqlite:///{os.path.join(os.path.abspath(os.path.dirname(__file__)), 'local_database.db')}"
-
+    raise RuntimeError("FATAL: The POSTGRES_URL environment variable is not set. Please set it in the Cloudflare Pages dashboard.")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -44,10 +40,8 @@ UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'mysite
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# On Vercel, the filesystem is read-only, so we can't create directories at runtime.
-if not os.environ.get('VERCEL'):
-    if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER)
+# The following block is removed because Cloudflare's environment is read-only.
+# We cannot create directories at runtime. A different solution is needed for image uploads.
 
 # --- 4. نماذج قاعدة البيانات (Data Models) ---
 
@@ -153,6 +147,7 @@ def process_image(file, dress_id):
             h_size = int((float(img.size[1]) * float(w_percent)))
             img = img.resize((800, h_size), Image.Resampling.LANCZOS)
         filename = f"{dress_id}.jpg"
+        # This will fail in a read-only environment. A different storage solution is needed.
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename), "JPEG", quality=65)
         return filename
     except: return ""
@@ -451,8 +446,12 @@ def add_dress():
         if 'dress_image' in request.files:
             file = request.files['dress_image']
             if file and allowed_file(file.filename):
+                # NOTE: process_image will fail on read-only filesystems.
+                # A flash message should inform the user about this.
                 img_filename = process_image(file, dress_id)
-        
+                if not img_filename:
+                    flash('فشل رفع الصورة. البيئة الحالية لا تدعم حفظ الملفات.', 'warning')
+
         new_dress = Dress(
             id=dress_id,
             name=request.form['dress_name'],
@@ -483,7 +482,12 @@ def edit_dress(dress_id):
             if 'dress_image' in request.files:
                 file = request.files['dress_image']
                 if file and allowed_file(file.filename):
-                    dress.image = process_image(file, dress_id)
+                    # NOTE: process_image will fail on read-only filesystems.
+                    img_filename = process_image(file, dress_id)
+                    if img_filename:
+                        dress.image = img_filename
+                    else:
+                        flash('فشل رفع الصورة. البيئة الحالية لا تدعم حفظ الملفات.', 'warning')
             db.session.commit()
             flash('تم تحديث بيانات الفستان', 'success')
         except IntegrityError:
@@ -496,9 +500,13 @@ def edit_dress(dress_id):
 def delete_dress(dress_id):
     if not is_manager(): return redirect(url_for('index'))
     dress = Dress.query.get_or_404(dress_id)
+    # Deleting the image from a read-only filesystem will also fail.
+    # We will ignore the error for now.
     if dress.image:
         try: os.remove(os.path.join(app.config['UPLOAD_FOLDER'], dress.image))
-        except: pass
+        except OSError as e:
+            flash(f"لم نتمكن من حذف ملف الصورة (متوقع): {e}", "info")
+            pass
     db.session.delete(dress)
     db.session.commit()
     flash('تم حذف الفستان', 'success')
@@ -769,17 +777,21 @@ def info_page():
 @app.route('/download_backup')
 def download_backup():
     if not is_manager(): return redirect(url_for('index'))
-    # This function now needs to be adapted to dump database data into CSVs then zip them.
-    # For now, it will only back up images.
+    # This function needs to be adapted for a read-only filesystem.
+    # Currently, it might fail if the UPLOAD_FOLDER does not exist.
+    # A better approach would be to fetch data from the database and generate CSVs in memory.
     mem = io.BytesIO()
     with zipfile.ZipFile(mem, 'w', zipfile.ZIP_DEFLATED) as zf:
-        # Backing up images
-        for root, dirs, files in os.walk(UPLOAD_FOLDER):
-            for file in files:
-                zf.write(os.path.join(root, file), os.path.join('dress_images', file))
+        # Backing up images (will likely fail if UPLOAD_FOLDER is not populated)
+        if os.path.exists(UPLOAD_FOLDER):
+            for root, dirs, files in os.walk(UPLOAD_FOLDER):
+                for file in files:
+                    zf.write(os.path.join(root, file), os.path.join('dress_images', file))
     mem.seek(0)
-    flash('ملاحظة: النسخ الاحتياطي الحالي يتضمن الصور فقط. سيتم تطويره لاحقاً ليشمل بيانات قاعدة البيانات.', 'info')
+    flash('ملاحظة: النسخ الاحتياطي الحالي قد لا يعمل بشكل كامل بسبب قيود البيئة. سيتم تطويره لاحقاً.', 'warning')
     return send_file(mem, mimetype='application/zip', as_attachment=True, download_name=f'Backup_Images_{get_today_date_str()}.zip')
 
 if __name__ == '__main__':
+    # This part is not executed when deployed on Cloudflare Pages,
+    # but it's good practice to keep it for local development.
     app.run(debug=True, host='0.0.0.0', port=5000)
