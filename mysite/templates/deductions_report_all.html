@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}
+تقرير الخصومات الشامل
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h1 style="text-align: center; margin-bottom: 20px;">تقرير الخصومات الشامل</h1>
+
+    <div class="custom-card-container" style="max-width: 800px; margin: auto;">
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <span>إجمالي قيمة الخصومات: <span style="color: #FF453A;">{{ "{:,.2f}".format(total_deductions) }}</span> جنيه</span>
+            </div>
+            <div class="custom-card-body">
+                {% if deductions %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped text-center">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>التاريخ</th>
+                                    <th>اسم الموظف</th>
+                                    <th>المبلغ</th>
+                                    <th>السبب</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for deduction in deductions %}
+                                    <tr>
+                                        <td>{{ deduction.date }}</td>
+                                        <td>{{ deduction.employee_name }}</td>
+                                        <td style="color: #FF453A; font-weight: bold;">{{ deduction.amount }}</td>
+                                        <td>{{ deduction.reason }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-center mt-3">لا توجد أي خصومات مسجلة حتى الآن.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{{ url_for('reports_menu') }}" class="btn btn-secondary">العودة إلى التقارير</a>
+    </div>
+</div>
+{% endblock %}

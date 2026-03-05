@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+سجل المدفوعات
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h1 style="text-align: center; margin-bottom: 20px;">سجل مدفوعات الرواتب</h1>
+
+    <div class="custom-card-container" style="max-width: 800px; margin: auto;">
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <span>إجمالي المدفوعات: <span style="color: #30D158;">{{ "{:,.2f}".format(total_payments) }}</span> جنيه</span>
+            </div>
+            <div class="custom-card-body">
+                {% if payments %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped text-center">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>تاريخ الدفع</th>
+                                    <th>اسم الموظف</th>
+                                    <th>المبلغ المدفوع</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in payments %}
+                                    <tr>
+                                        <td>{{ payment.date }}</td>
+                                        <td>{{ payment.employee_name }}</td>
+                                        <td style="color: #30D158; font-weight: bold;">{{ payment.amount_paid }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-center mt-3">لا توجد أي مدفوعات مسجلة حتى الآن.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{{ url_for('reports_menu') }}" class="btn btn-secondary">العودة إلى التقارير</a>
+    </div>
+</div>
+{% endblock %}

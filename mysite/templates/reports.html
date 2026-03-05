@@ -34,6 +34,16 @@
             <div style="color: #FF453A;"><i class="fa-solid fa-receipt"></i></div>
             <span style="margin-top:10px; font-size:14px;">المصروفات</span>
         </a>
+
+        <a href="{{ url_for('deductions_report_all') }}" class="app-icon-card">
+            <div style="color: #AC8E68;"><i class="fa-solid fa-gavel"></i></div>
+            <span style="margin-top:10px; font-size:14px;">تقرير الخصومات</span>
+        </a>
+
+        <a href="{{ url_for('payments_log') }}" class="app-icon-card">
+            <div style="color: #48CFAE;"><i class="fa-solid fa-money-bill-transfer"></i></div>
+            <span style="margin-top:10px; font-size:14px;">سجل المدفوعات</span>
+        </a>
     </div>
 </div>
 {% endblock %}

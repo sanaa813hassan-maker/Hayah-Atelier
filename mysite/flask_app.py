@@ -522,6 +522,21 @@ def deductions_report(employee_name):
     if not is_manager(): return redirect(url_for('index'))
     deds = [d for d in read_data('deductions') if d['employee_name']==employee_name]
     return render_template('deductions_report.html', deductions=deds, employee_name=employee_name, total=sum(float(d['amount']) for d in deds))
+
+@app.route('/deductions_report_all')
+def deductions_report_all():
+    if not is_manager(): return redirect(url_for('index'))
+    all_deductions = read_data('deductions')[::-1]
+    total = sum(float(d.get('amount', 0)) for d in all_deductions)
+    return render_template('deductions_report_all.html', deductions=all_deductions, total_deductions=total)
+
+@app.route('/payments_log')
+def payments_log():
+    if not is_manager(): return redirect(url_for('index'))
+    all_payments = read_data('payments')[::-1]
+    total = sum(float(p.get('amount_paid', 0)) for p in all_payments)
+    return render_template('payments_log.html', payments=all_payments, total_payments=total)
+
 @app.route('/download_backup')
 def download_backup():
     if not is_manager(): return redirect(url_for('index'))
