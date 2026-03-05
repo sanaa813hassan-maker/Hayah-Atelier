@@ -1,46 +1,36 @@
 {% extends "layout.html" %}
-
 {% block content %}
 <div class="fade-in">
-    <h2 style="text-align: center; margin-bottom: 20px;">شؤون الطاقم والملاك</h2>
+    <h2 style="text-align: center; margin-bottom: 20px;">شؤون الموظفين والمالية</h2>
 
-    <div class="app-grid">
+    <a href="{{ url_for('manage_attendance') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--success);">
+        <i class="fa-regular fa-calendar-check" style="font-size: 30px; color: var(--success);"></i>
+        <div><h3 style="margin: 0;">تسجيل الحضور والغياب</h3><span style="font-size: 12px; color: var(--text-secondary);">تسجيل حضور وانصراف الموظفين لليوم الحالي.</span></div>
+    </a>
 
-        <a href="{{ url_for('manage_attendance') }}" class="app-icon-card">
-            <div style="color: #30D158;"><i class="fa-regular fa-calendar-check"></i></div>
-            <span style="margin-top:10px; font-size:13px;">تسجيل حضور</span>
-        </a>
+    <a href="{{ url_for('add_payment') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--warning);">
+        <i class="fa-solid fa-hand-holding-dollar" style="font-size: 30px; color: var(--warning);"></i>
+        <div><h3 style="margin: 0;">صرف راتب أو مكافأة</h3><span style="font-size: 12px; color: var(--text-secondary);">تسجيل دفعة راتب أو مكافأة لموظف.</span></div>
+    </a>
 
-        <a href="{{ url_for('add_payment') }}" class="app-icon-card">
-            <div style="color: #FFD60A;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-            <span style="margin-top:10px; font-size:13px;">صرف راتب</span>
-        </a>
+    <a href="{{ url_for('add_deduction') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--danger);">
+        <i class="fa-solid fa-file-circle-minus" style="font-size: 30px; color: var(--danger);"></i>
+        <div><h3 style="margin: 0;">تسجيل خصم أو جزاء</h3><span style="font-size: 12px; color: var(--text-secondary);">تطبيق خصم مالي على موظف.</span></div>
+    </a>
+    
+    <a href="{{ url_for('add_withdrawal') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--pink);">
+        <i class="fa-solid fa-wallet" style="font-size: 30px; color: var(--pink);"></i>
+        <div><h3 style="margin: 0;">تسجيل سحب للمالك</h3><span style="font-size: 12px; color: var(--text-secondary);">تسجيل مبلغ مسحوب بواسطة أحد الملاك.</span></div>
+    </a>
 
-        <a href="{{ url_for('add_deduction') }}" class="app-icon-card">
-            <div style="color: #FF453A;"><i class="fa-solid fa-file-circle-minus"></i></div>
-            <span style="margin-top:10px; font-size:13px;">خصم / جزاء</span>
-        </a>
+    <a href="{{ url_for('add_employee') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--info);">
+        <i class="fa-solid fa-user-plus" style="font-size: 30px; color: var(--info);"></i>
+        <div><h3 style="margin: 0;">إدارة الموظفين والشركاء</h3><span style="font-size: 12px; color: var(--text-secondary);">إضافة أو تعديل بيانات موظف أو شريك.</span></div>
+    </a>
 
-        <a href="{{ url_for('add_withdrawal') }}" class="app-icon-card">
-            <div style="color: #BF5AF2;"><i class="fa-solid fa-wallet"></i></div>
-            <span style="margin-top:10px; font-size:13px;">سحب مالك</span>
-        </a>
-
-        <a href="{{ url_for('add_employee') }}" class="app-icon-card">
-            <div style="color: #64D2FF;"><i class="fa-solid fa-user-plus"></i></div>
-            <span style="margin-top:10px; font-size:13px;">إضافة مالك/شريك أو موظف</span>
-        </a>
-
-        <a href="{{ url_for('info_page') }}" class="app-icon-card" style="border: 1px solid #00f2ea;">
-            <div style="color: #00f2ea;"><i class="fa-solid fa-circle-info"></i></div>
-            <span style="margin-top:10px; font-size:13px;">أرقام وكتالوج</span>
-        </a>
-
-        <a href="{{ url_for('download_backup') }}" class="app-icon-card" style="border-color: var(--text-secondary);">
-            <div style="color: white;"><i class="fa-solid fa-cloud-arrow-down"></i></div>
-            <span style="margin-top:10px; font-size:13px;">نسخة احتياطية</span>
-        </a>
-
-    </div>
+    <a href="{{ url_for('download_backup') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--text-secondary);">
+        <i class="fa-solid fa-cloud-arrow-down" style="font-size: 30px; color: var(--text-secondary);"></i>
+        <div><h3 style="margin: 0;">تحميل نسخة احتياطية</h3><span style="font-size: 12px; color: var(--text-secondary);">تنزيل نسخة كاملة من قاعدة البيانات.</span></div>
+    </a>
 </div>
 {% endblock %}

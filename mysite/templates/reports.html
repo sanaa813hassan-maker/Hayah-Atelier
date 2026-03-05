@@ -1,49 +1,36 @@
 {% extends "layout.html" %}
-
 {% block content %}
 <div class="fade-in">
-    <h1 style="text-align: center; margin-bottom: 30px;">مركز التقارير</h1>
+    <h2 style="text-align: center; margin-bottom: 20px;">مركز التقارير</h2>
 
-    <div class="app-grid">
-        <a href="{{ url_for('profit_report') }}" class="app-icon-card">
-            <div style="color: #FF9F0A;"><i class="fa-solid fa-sack-dollar"></i></div>
-            <span style="margin-top:10px; font-size:14px;">صافي الربح</span>
-        </a>
+    <!-- Income and Profit -->
+    <a href="{{ url_for('profit_report') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--success);">
+        <i class="fa-solid fa-sack-dollar" style="font-size: 30px; color: var(--success);"></i>
+        <div><h3 style="margin: 0;">تقرير صافي الربح</h3><span style="font-size: 12px; color: var(--text-secondary);">عرض الأرباح بعد خصم المصروفات والخصومات.</span></div>
+    </a>
+    <a href="{{ url_for('income_report') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--primary);">
+        <i class="fa-solid fa-chart-line" style="font-size: 30px; color: var(--primary);"></i>
+        <div><h3 style="margin: 0;">تقرير الإيرادات</h3><span style="font-size: 12px; color: var(--text-secondary);">عرض إجمالي الدخل من الإيجارات.</span></div>
+    </a>
 
-        <a href="{{ url_for('income_report') }}" class="app-icon-card">
-            <div style="color: #30D158;"><i class="fa-solid fa-chart-simple"></i></div>
-            <span style="margin-top:10px; font-size:14px;">الإيرادات</span>
-        </a>
+    <!-- Dress and Employee Reports -->
+    <a href="{{ url_for('dress_report') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--pink);">
+        <i class="fa-solid fa-shirt" style="font-size: 30px; color: var(--pink);"></i>
+        <div><h3 style="margin: 0;">تقرير أرباح الفساتين</h3><span style="font-size: 12px; color: var(--text-secondary);">عرض أداء كل فستان على حدة.</span></div>
+    </a>
+    <a href="{{ url_for('employee_report') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--info);">
+        <i class="fa-solid fa-users" style="font-size: 30px; color: var(--info);"></i>
+        <div><h3 style="margin: 0;">تقرير أداء الموظفين</h3><span style="font-size: 12px; color: var(--text-secondary);">عرض الحجوزات والخصومات لكل موظف.</span></div>
+    </a>
 
-        <a href="{{ url_for('dress_report') }}" class="app-icon-card">
-            <div style="color: #BF5AF2;"><i class="fa-solid fa-shirt"></i></div>
-            <span style="margin-top:10px; font-size:14px;">أرباح الفساتين</span>
-        </a>
-
-        <a href="{{ url_for('employee_report') }}" class="app-icon-card">
-            <div style="color: #0A84FF;"><i class="fa-solid fa-users"></i></div>
-            <span style="margin-top:10px; font-size:14px;">الموظفين</span>
-        </a>
-
-        <a href="{{ url_for('dresses') }}" class="app-icon-card">
-            <div style="color: #FFD60A;"><i class="fa-solid fa-tags"></i></div>
-            <span style="margin-top:10px; font-size:14px;">الكتالوج</span>
-        </a>
-
-        <a href="{{ url_for('expenses_list') }}" class="app-icon-card">
-            <div style="color: #FF453A;"><i class="fa-solid fa-receipt"></i></div>
-            <span style="margin-top:10px; font-size:14px;">المصروفات</span>
-        </a>
-
-        <a href="{{ url_for('deductions_report_all') }}" class="app-icon-card">
-            <div style="color: #AC8E68;"><i class="fa-solid fa-gavel"></i></div>
-            <span style="margin-top:10px; font-size:14px;">تقرير الخصومات</span>
-        </a>
-
-        <a href="{{ url_for('payments_log') }}" class="app-icon-card">
-            <div style="color: #48CFAE;"><i class="fa-solid fa-money-bill-transfer"></i></div>
-            <span style="margin-top:10px; font-size:14px;">سجل المدفوعات</span>
-        </a>
-    </div>
+    <!-- Deductions and Payments -->
+    <a href="{{ url_for('deductions_report_all') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--warning);">
+        <i class="fa-solid fa-gavel" style="font-size: 30px; color: var(--warning);"></i>
+        <div><h3 style="margin: 0;">تقرير الخصومات العام</h3><span style="font-size: 12px; color: var(--text-secondary);">عرض جميع الخصومات التي تمت.</span></div>
+    </a>
+    <a href="{{ url_for('payments_log') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: #48CFAE;">
+        <i class="fa-solid fa-money-bill-transfer" style="font-size: 30px; color: #48CFAE;"></i>
+        <div><h3 style="margin: 0;">سجل المدفوعات</h3><span style="font-size: 12px; color: var(--text-secondary);">عرض تفصيلي لكل المدفوعات المسجلة.</span></div>
+    </a>
 </div>
 {% endblock %}
