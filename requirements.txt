@@ -1,5 +1,6 @@
 Flask
 SQLAlchemy
+Flask-SQLAlchemy
 werkzeug
 Pillow
 pytz
