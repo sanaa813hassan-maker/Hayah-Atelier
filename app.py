@@ -17,11 +17,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 
 # --- 1. إعداد المسارات والتطبيق ---
-base_dir = os.path.abspath(os.path.dirname(__file__))
-template_dir = os.path.join(base_dir, 'templates')
-static_dir = os.path.join(base_dir, 'static')
-
-app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+# Adjusted paths to be relative to the new app.py location
+app = Flask(__name__, template_folder='mysite/templates', static_folder='mysite/static')
 app.secret_key = 'hayah_atelier_secret_key_12345'
 
 # --- 2. إعداد قاعدة البيانات ---
@@ -31,7 +28,9 @@ if not db_uri:
         raise RuntimeError("FATAL: The POSTGRES_URL environment variable is not set on Vercel.")
     else:
         print("WARNING: POSTGRES_URL not found. Falling back to local SQLite database.")
-        db_uri = f"sqlite:///{os.path.join(base_dir, 'local_database.db')}"
+        # Make sure the local database path is also relative to the project root
+        db_uri = f"sqlite:///{os.path.join(os.path.abspath(os.path.dirname(__file__)), 'local_database.db')}"
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -40,7 +39,8 @@ db = SQLAlchemy(app)
 # --- 3. إعدادات أخرى (تليجرام، صور) ---
 TELEGRAM_TOKEN = "8376528591:AAHZ8eDXukOoCzJO2ivBUdWdtgOJGE-iTUM"
 TELEGRAM_CHAT_IDS = ["7075915087", "5267495549"]
-UPLOAD_FOLDER = os.path.join(static_dir, 'dress_images')
+# Adjusted UPLOAD_FOLDER path
+UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'mysite/static', 'dress_images')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
