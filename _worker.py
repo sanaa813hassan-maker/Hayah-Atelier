@@ -1,4 +1,15 @@
-from app import app
+from app import app as flask_app
+from worker import Fetcher, Middleware
 
-# This file is the entrypoint for the Cloudflare Pages deployment.
-# It simply imports the Flask app object from your main application file (app.py).
+# The fetcher makes HTTP requests to the origin.
+# This is a reference to the Flask app.
+app = Fetcher.from_app(flask_app)
+
+# The middleware intercepts requests and responses.
+# It can be used to add authentication, logging, etc.
+# For now, we just pass the request through.
+middleware = Middleware()
+
+@middleware.function
+def fetch(request):
+  return app.fetch(request)
