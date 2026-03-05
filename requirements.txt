@@ -1,9 +1,0 @@
-Flask
-SQLAlchemy
-Flask-SQLAlchemy
-werkzeug
-Pillow
-pytz
-requests
-psycopg2-binary
-gunicorn

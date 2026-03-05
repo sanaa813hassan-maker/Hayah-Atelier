@@ -1,36 +1,52 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
+
+{% block title %}إدارة الموظفين{% endblock %}
+
 {% block content %}
-<div class="fade-in">
-    <h2 style="text-align: center; margin-bottom: 20px;">شؤون الموظفين والمالية</h2>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">إدارة الموظفين</h2>
 
-    <a href="{{ url_for('manage_attendance') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--success);">
-        <i class="fa-regular fa-calendar-check" style="font-size: 30px; color: var(--success);"></i>
-        <div><h3 style="margin: 0;">تسجيل الحضور والغياب</h3><span style="font-size: 12px; color: var(--text-secondary);">تسجيل حضور وانصراف الموظفين لليوم الحالي.</span></div>
-    </a>
+    <!-- رسائل Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} text-right" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
-    <a href="{{ url_for('add_payment') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--warning);">
-        <i class="fa-solid fa-hand-holding-dollar" style="font-size: 30px; color: var(--warning);"></i>
-        <div><h3 style="margin: 0;">صرف راتب أو مكافأة</h3><span style="font-size: 12px; color: var(--text-secondary);">تسجيل دفعة راتب أو مكافأة لموظف.</span></div>
-    </a>
+    <div class="card">
+        <div class="card-header">
+            إضافة موظف جديد
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('add_employee') }}" method="POST">
+                <div class="form-group">
+                    <label for="employee_name">اسم الموظف</label>
+                    <input type="text" class="form-control" id="employee_name" name="employee_name" required>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">إضافة</button>
+            </form>
+        </div>
+    </div>
 
-    <a href="{{ url_for('add_deduction') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--danger);">
-        <i class="fa-solid fa-file-circle-minus" style="font-size: 30px; color: var(--danger);"></i>
-        <div><h3 style="margin: 0;">تسجيل خصم أو جزاء</h3><span style="font-size: 12px; color: var(--text-secondary);">تطبيق خصم مالي على موظف.</span></div>
-    </a>
-    
-    <a href="{{ url_for('add_withdrawal') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--pink);">
-        <i class="fa-solid fa-wallet" style="font-size: 30px; color: var(--pink);"></i>
-        <div><h3 style="margin: 0;">تسجيل سحب للمالك</h3><span style="font-size: 12px; color: var(--text-secondary);">تسجيل مبلغ مسحوب بواسطة أحد الملاك.</span></div>
-    </a>
+    <div class="card mt-4">
+        <div class="card-header">
+            قائمة الموظفين
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for emp in employees %}
+                <li class="list-group-item">{{ emp }}</li>
+            {% else %}
+                <li class="list-group-item">لا يوجد موظفين حاليًا.</li>
+            {% endfor %}
+        </ul>
+    </div>
 
-    <a href="{{ url_for('add_employee') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--info);">
-        <i class="fa-solid fa-user-plus" style="font-size: 30px; color: var(--info);"></i>
-        <div><h3 style="margin: 0;">إدارة الموظفين والشركاء</h3><span style="font-size: 12px; color: var(--text-secondary);">إضافة أو تعديل بيانات موظف أو شريك.</span></div>
-    </a>
-
-    <a href="{{ url_for('download_backup') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 15px; border-color: var(--text-secondary);">
-        <i class="fa-solid fa-cloud-arrow-down" style="font-size: 30px; color: var(--text-secondary);"></i>
-        <div><h3 style="margin: 0;">تحميل نسخة احتياطية</h3><span style="font-size: 12px; color: var(--text-secondary);">تنزيل نسخة كاملة من قاعدة البيانات.</span></div>
-    </a>
+    <div class="mt-4 text-center">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">العودة للرئيسية</a>
+    </div>
 </div>
 {% endblock %}

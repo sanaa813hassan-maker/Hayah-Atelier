@@ -1,48 +1,50 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
+
+{% block title %}إضافة حجز جديد{% endblock %}
 
 {% block content %}
-<div class="fade-in">
-    <h2 style="text-align: center; margin-bottom: 20px;">تسجيل حجز جديد</h2>
-    <form method="POST">
-        <div class="glass-card">
-            <h3 style="font-size: 16px; color: var(--primary-color);">البيانات الأساسية</h3>
-            <input type="text" name="client_name" placeholder="اسم العميل" required>
-            <input type="tel" name="phone" placeholder="رقم الهاتف" required>
-            <input type="text" name="dress_name" placeholder="اسم الفستان" list="dresses_list" required>
-            <datalist id="dresses_list">{% for dress in dresses %}<option value="{{ dress.dress_name }}">{% endfor %}</datalist>
-            <label class="text-muted">تاريخ المناسبة</label>
-            <input type="date" name="due_date" required>
+<div class="container mt-4">
+    <h2 class="text-center">إضافة حجز جديد</h2>
+    <form action="{{ url_for('add_rental') }}" method="POST" class="text-right mt-4">
+        <div class="form-group">
+            <label for="client_name">اسم العميل</label>
+            <input type="text" class="form-control" id="client_name" name="client_name" required>
         </div>
-
-        <div class="glass-card">
-            <h3 style="font-size: 16px; color: var(--accent-pink);">المقاسات</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <input type="text" name="chest" placeholder="صدر">
-                <input type="text" name="waist" placeholder="وسط">
-                <input type="text" name="hips" placeholder="هيب">
-                <input type="text" name="arm" placeholder="دراع">
-            </div>
+        <div class="form-group">
+            <label for="phone">رقم الهاتف</label>
+            <input type="text" class="form-control" id="phone" name="phone" required>
         </div>
-
-        <div class="glass-card">
-            <h3 style="font-size: 16px; color: var(--success);">المالية</h3>
-            <input type="number" name="total_price" placeholder="السعر الإجمالي" required>
-            <input type="number" name="discount" placeholder="قيمة الخصم (إن وجد)" value="0">
-            <input type="number" name="paid_amount" placeholder="المدفوع (العربون)" required>
-            <select name="payment_method">
-                <option value="كاش">كاش 💵</option>
-                <option value="فودافون كاش">فودافون 📱</option>
-                <option value="انستا باي">انستا 🏦</option>
+        <div class="form-group">
+            <label for="dress_name">اسم الفستان</label>
+            <input list="dress-list" class="form-control" id="dress_name" name="dress_name" required>
+            <datalist id="dress-list">
+                {% for dress in dresses %}
+                    <option value="{{ dress }}">
+                {% endfor %}
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label for="total_price">السعر الإجمالي</label>
+            <input type="number" class="form-control" id="total_price" name="total_price" required>
+        </div>
+        <div class="form-group">
+            <label for="paid_amount">المبلغ المدفوع</label>
+            <input type="number" class="form-control" id="paid_amount" name="paid_amount" required>
+        </div>
+        <div class="form-group">
+            <label for="due_date">تاريخ التسليم</label>
+            <input type="date" class="form-control" id="due_date" name="due_date" required>
+        </div>
+        <div class="form-group">
+            <label for="employee_name">اسم الموظف</label>
+            <select class="form-control" id="employee_name" name="employee_name" required>
+                {% for emp in employees %}
+                    <option value="{{ emp }}">{{ emp }}</option>
+                {% endfor %}
             </select>
         </div>
-
-        <div class="glass-card">
-            <input type="text" name="employee_name" placeholder="الموظف المسؤول" list="emp_list" required value="{{ session.get('username') }}">
-            <datalist id="emp_list">{% for emp in employees %}<option value="{{ emp.employee_name }}">{% endfor %}</datalist>
-            <textarea name="notes" placeholder="ملاحظات..."></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary">حفظ الحجز</button>
+        <button type="submit" class="btn btn-primary mt-3">إضافة الحجز</button>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">إلغاء</a>
     </form>
 </div>
 {% endblock %}
