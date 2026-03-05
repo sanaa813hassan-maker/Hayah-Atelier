@@ -3,49 +3,32 @@
 {% block title %}إدارة الموظفين{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="text-center mb-4">إدارة الموظفين</h2>
+<div class="container mt-4 text-center">
+    <h2 class="mb-4">قسم إدارة الموظفين</h2>
+    <p class="lead mb-5">اختر الإجراء المطلوب.</p>
 
-    <!-- رسائل Flash -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} text-right" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
-    <div class="card">
-        <div class="card-header">
-            إضافة موظف جديد
-        </div>
-        <div class="card-body">
-            <form action="{{ url_for('add_employee') }}" method="POST">
-                <div class="form-group">
-                    <label for="employee_name">اسم الموظف</label>
-                    <input type="text" class="form-control" id="employee_name" name="employee_name" required>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">إضافة</button>
-            </form>
-        </div>
+    <div class="d-flex justify-content-center flex-wrap">
+        <a href="{{ url_for('employee_report') }}" class="btn btn-primary btn-lg m-2" style="width: 250px; padding: 20px;">
+            <i class="fas fa-file-alt mr-2"></i> تقرير الموظفين
+        </a>
+        <a href="{{ url_for('add_employee') }}" class="btn btn-success btn-lg m-2" style="width: 250px; padding: 20px;">
+            <i class="fas fa-user-plus mr-2"></i> إضافة موظف جديد
+        </a>
+        <a href="{{ url_for('manage_attendance') }}" class="btn btn-info btn-lg m-2" style="width: 250px; padding: 20px;">
+            <i class="fas fa-calendar-check mr-2"></i> تسجيل الحضور والغياب
+        </a>
+        <a href="{{ url_for('add_payment') }}" class="btn btn-warning btn-lg m-2" style="width: 250px; padding: 20px; color: #fff;">
+            <i class="fas fa-money-bill-wave mr-2"></i> صرف راتب
+        </a>
+         <a href="{{ url_for('add_deduction') }}" class="btn btn-danger btn-lg m-2" style="width: 250px; padding: 20px;">
+            <i class="fas fa-minus-circle mr-2"></i> تسجيل خصم
+        </a>
+        <a href="{{ url_for('add_withdrawal') }}" class="btn btn-dark btn-lg m-2" style="width: 250px; padding: 20px;">
+            <i class="fas fa-wallet mr-2"></i> مسحوبات المالك
+        </a>
     </div>
 
-    <div class="card mt-4">
-        <div class="card-header">
-            قائمة الموظفين
-        </div>
-        <ul class="list-group list-group-flush">
-            {% for emp in employees %}
-                <li class="list-group-item">{{ emp }}</li>
-            {% else %}
-                <li class="list-group-item">لا يوجد موظفين حاليًا.</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div class="mt-4 text-center">
+    <div class="mt-5">
         <a href="{{ url_for('index') }}" class="btn btn-secondary">العودة للرئيسية</a>
     </div>
 </div>
