@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    /* ستايل زرار التوغل iOS */
+    .ios-toggle {
+        appearance: none; width: 50px; height: 30px; background: #3a3a3c;
+        border-radius: 30px; position: relative; cursor: pointer; outline: none; transition: 0.3s;
+    }
+    .ios-toggle::after {
+        content: ''; position: absolute; top: 2px; left: 2px; width: 26px; height: 26px;
+        background: white; border-radius: 50%; transition: 0.3s;
+    }
+    .ios-toggle:checked { background: var(--success); }
+    .ios-toggle:checked::after { transform: translateX(20px); }
+</style>
+
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">دفتر الحضور <span style="font-size:14px; color:var(--text-secondary);">({{ today }})</span></h2>
+
+    <form method="POST">
+        <div class="glass-card" style="padding: 0;">
+            {% for emp in employees %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid var(--glass-border);">
+
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-user" style="color: white;"></i>
+                    </div>
+                    <span style="font-size: 16px; font-weight: 600;">{{ emp.employee_name }}</span>
+                </div>
+
+                <input type="hidden" name="status_{{ emp.employee_name }}" value="Absent" id="hidden_{{ loop.index }}">
+                <input type="checkbox" class="ios-toggle"
+                       onchange="document.getElementById('hidden_{{ loop.index }}').value = this.checked ? 'Present' : 'Absent'"
+                       {% if today_status.get(emp.employee_name) == 'Present' %}checked{% endif %}>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 20px;">
+            <i class="fa-solid fa-save"></i> حفظ الحضور
+        </button>
+    </form>
+</div>
+{% endblock %}

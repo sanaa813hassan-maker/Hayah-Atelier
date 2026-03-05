@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in" style="min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
+    <div class="glass-card" style="text-align: center; border-top: 5px solid var(--danger); max-width: 400px; width: 100%;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 50px; color: var(--danger); margin-bottom: 20px;"></i>
+
+        <h2 style="margin-bottom: 10px;">حذف الموظف نهائياً</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+            أنت على وشك حذف <strong>{{ employee_name }}</strong>.<br>
+            هذا الإجراء لا يمكن التراجع عنه.
+        </p>
+
+        <form method="POST">
+            <label class="text-muted" style="text-align: right;">تأكيد كلمة مرور المدير:</label>
+            <input type="password" name="password" placeholder="كلمة المرور..." required style="text-align: center;">
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <a href="{{ url_for('employee_report') }}" class="btn" style="background: rgba(255,255,255,0.1);">إلغاء</a>
+                <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

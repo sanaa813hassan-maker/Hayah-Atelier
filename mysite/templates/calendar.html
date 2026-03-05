@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0;">{{ month_name }} {{ current_year }}</h2>
+        <span style="background: var(--primary-color); padding: 5px 12px; border-radius: 20px; font-size: 12px;">{{ events_by_date|length }} مناسبات</span>
+    </div>
+
+    <div class="glass-card" style="padding: 15px;">
+        <form action="{{ url_for('calendar_view') }}" method="GET" style="display: flex; gap: 10px;">
+            <select name="month" style="margin: 0; flex: 1;">
+                {% for m_idx in range(1, 13) %}
+                <option value="{{ m_idx }}" {% if m_idx == current_month %}selected{% endif %}>{{ month_names[m_idx] }}</option>
+                {% endfor %}
+            </select>
+            <select name="year" style="margin: 0; flex: 1;">
+                {% for y in years_list %}
+                <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary" style="width: auto; margin: 0; padding: 0 20px;"><i class="fa-solid fa-arrow-left"></i></button>
+        </form>
+    </div>
+
+    <div class="glass-card" style="padding: 10px;">
+        <div class="calendar-grid" style="margin-bottom: 10px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">
+            <div class="cal-header">سبت</div>
+            <div class="cal-header">أحد</div>
+            <div class="cal-header">إثنين</div>
+            <div class="cal-header">ثلاثاء</div>
+            <div class="cal-header">أربعاء</div>
+            <div class="cal-header">خميس</div>
+            <div class="cal-header">جمعة</div>
+        </div>
+
+        {% for week in calendar_weeks %}
+        <div class="calendar-grid" style="margin-bottom: 5px;">
+            {% for day in week %}
+                {% if day == 0 %}
+                    <div></div>
+                {% else %}
+                    {% set day_str = "%04d-%02d-%02d" % (current_year, current_month, day) %}
+                    {% set is_today = (day_str == today_str) %}
+                    {% set has_event = (day_str in events_by_date) %}
+                    <div class="cal-day {{ 'today' if is_today }} {{ 'has-event' if has_event }}" onclick="showEvent('{{ day_str }}')">
+                        {{ day }}
+                        {% if has_event %}<div class="event-dot"></div>{% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="events-container" style="margin-top: 20px;">
+        {% for date_key, events in events_by_date.items() %}
+            <div class="glass-card event-card fade-in" id="event-{{ date_key }}" style="display: none; border-right: 4px solid var(--accent-pink);">
+                <h4 style="margin: 0 0 10px 0; color: var(--accent-pink);"><i class="fa-regular fa-calendar"></i> {{ date_key }}</h4>
+                {% for event in events %}
+                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                    <div style="font-weight: bold;">{{ event.client_name }}</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">{{ event.dress_name }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function showEvent(dateStr) {
+        document.querySelectorAll('.event-card').forEach(el => el.style.display = 'none');
+        const el = document.getElementById('event-' + dateStr);
+        if (el) {
+            el.style.display = 'block';
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+</script>
+{% endblock %}

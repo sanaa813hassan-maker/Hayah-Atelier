@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">{{ title }}</h2>
+
+    <div class="glass-card" style="padding: 10px;">
+        <form method="POST" style="display: flex; gap: 10px; align-items: center;">
+            <select name="report_type" style="margin: 0; flex: 1;">
+                <option value="daily" {% if report_type == 'daily' %}selected{% endif %}>يومي</option>
+                <option value="weekly" {% if report_type == 'weekly' %}selected{% endif %}>أسبوعي</option>
+                <option value="monthly" {% if report_type == 'monthly' %}selected{% endif %}>شهري</option>
+            </select>
+            <input type="date" name="selected_date" value="{{ selected_date }}" style="margin: 0; flex: 1;">
+            <button type="submit" class="btn btn-primary" style="width: auto; margin: 0; padding: 10px 15px;">
+                <i class="fa-solid fa-filter"></i>
+            </button>
+        </form>
+    </div>
+
+    <div class="glass-card" style="text-align: center; background: linear-gradient(135deg, rgba(10, 132, 255, 0.2), rgba(0, 0, 0, 0.6)); border: 1px solid var(--primary-color);">
+        <p style="color: var(--text-secondary); margin: 0;">إجمالي الدخل</p>
+        <h1 style="font-size: 45px; color: white; margin: 10px 0;">{{ report.total }} <span style="font-size: 20px;">ج</span></h1>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+        <div class="glass-card" style="text-align: center; padding: 15px;">
+            <i class="fa-solid fa-money-bill" style="color: var(--success); font-size: 20px;"></i>
+            <div style="font-size: 12px; color: var(--text-secondary); margin: 5px 0;">كاش</div>
+            <div style="font-weight: bold;">{{ report.cash }}</div>
+        </div>
+        <div class="glass-card" style="text-align: center; padding: 15px;">
+            <i class="fa-solid fa-mobile-screen" style="color: var(--danger); font-size: 20px;"></i>
+            <div style="font-size: 12px; color: var(--text-secondary); margin: 5px 0;">فودافون</div>
+            <div style="font-weight: bold;">{{ report.voda }}</div>
+        </div>
+        <div class="glass-card" style="text-align: center; padding: 15px;">
+            <i class="fa-solid fa-building-columns" style="color: var(--accent-pink); font-size: 20px;"></i>
+            <div style="font-size: 12px; color: var(--text-secondary); margin: 5px 0;">انستا</div>
+            <div style="font-weight: bold;">{{ report.insta }}</div>
+        </div>
+    </div>
+
+    <div class="glass-card" style="display: flex; justify-content: space-around;">
+        <div style="text-align: center;">
+            <span style="display: block; font-size: 20px; font-weight: bold;">{{ report.rentals_count }}</span>
+            <span style="font-size: 12px; color: var(--text-secondary);">حجز جديد</span>
+        </div>
+        <div style="width: 1px; background: var(--glass-border);"></div>
+        <div style="text-align: center;">
+            <span style="display: block; font-size: 20px; font-weight: bold;">{{ report.installments_count }}</span>
+            <span style="font-size: 12px; color: var(--text-secondary);">قسط مدفوع</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

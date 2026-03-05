@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">تسجيل خصم</h2>
+    <form method="POST">
+        <div class="glass-card" style="border-top: 4px solid var(--danger);">
+            <label class="text-muted">الموظف</label>
+            <select name="employee_name">{% for emp in employees %}<option value="{{ emp.employee_name }}">{{ emp.employee_name }}</option>{% endfor %}</select>
+            <label class="text-muted">قيمة الخصم</label>
+            <input type="number" name="amount" placeholder="المبلغ..." required style="color: var(--danger); font-weight: bold;">
+            <label class="text-muted">السبب</label>
+            <textarea name="reason" placeholder="سبب الخصم..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">تنفيذ الخصم</button>
+    </form>
+</div>
+{% endblock %}

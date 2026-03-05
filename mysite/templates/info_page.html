@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">معلومات الأتيليه</h2>
+    <div class="glass-card">
+        <h3 style="color: var(--success); margin-bottom: 15px;"><i class="fa-solid fa-money-bill-transfer"></i> التحويلات</h3>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>فودافون كاش</span><span style="font-family: sans-serif; direction: ltr; font-weight: bold;">010 1492 7779</span></div>
+        <div style="display: flex; justify-content: space-between;"><span>انستا باي</span><span style="font-family: sans-serif; direction: ltr; font-weight: bold;">010 2279 3313</span></div>
+    </div>
+    <a href="{{ url_for('dresses') }}" class="glass-card" style="display: flex; align-items: center; gap: 15px; border: 1px solid var(--warning); text-decoration: none; color: white;">
+        <i class="fa-solid fa-images" style="font-size: 30px; color: var(--warning);"></i>
+        <div><h3 style="margin: 0;">كتالوج الفساتين</h3><span style="font-size: 12px; color: var(--text-secondary);">عرض الصور والأسعار والباركود</span></div>
+    </a>
+</div>
+{% endblock %}

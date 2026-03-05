@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">تعديل حجز</h2>
+    <form method="POST">
+        <div class="glass-card">
+            <label class="text-muted">العميل</label><input type="text" name="client_name" value="{{ rental.client_name }}" required>
+            <label class="text-muted">الهاتف</label><input type="tel" name="phone" value="{{ rental.phone }}" required>
+            <label class="text-muted">الفستان</label><input type="text" name="dress_name" value="{{ rental.dress_name }}" list="dresses_list" required>
+            <datalist id="dresses_list">{% for dress in dresses %}<option value="{{ dress.dress_name }}">{% endfor %}</datalist>
+            <label class="text-muted">تاريخ المناسبة</label><input type="date" name="due_date" value="{{ rental.due_date }}" required>
+        </div>
+        <div class="glass-card">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="text" name="chest" value="{{ rental.chest }}">
+                <input type="text" name="waist" value="{{ rental.waist }}">
+                <input type="text" name="hips" value="{{ rental.hips }}">
+                <input type="text" name="arm" value="{{ rental.arm }}">
+            </div>
+        </div>
+        <div class="glass-card">
+            <label class="text-muted">السعر الإجمالي</label><input type="number" name="total_price" value="{{ rental.total_price }}" required>
+            <label class="text-muted">الخصم</label><input type="number" name="discount" value="{{ rental.discount }}">
+            <label class="text-muted">المدفوع</label><input type="number" name="paid_amount" value="{{ rental.paid_amount }}" required>
+            <select name="payment_method">
+                <option value="كاش" {% if rental.payment_method == 'كاش' %}selected{% endif %}>كاش</option>
+                <option value="فودافون كاش" {% if rental.payment_method == 'فودافون كاش' %}selected{% endif %}>فودافون كاش</option>
+                <option value="انستا باي" {% if rental.payment_method == 'انستا باي' %}selected{% endif %}>انستا باي</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+    </form>
+</div>
+{% endblock %}

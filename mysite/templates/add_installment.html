@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">سداد قسط</h2>
+
+    <div class="glass-card" style="text-align: center; padding: 30px;">
+        <p style="color: var(--text-secondary); margin: 0;">المبلغ المتبقي على العميل</p>
+        <h1 style="font-size: 40px; color: var(--danger); margin: 10px 0;">{{ rental.remaining_balance }} ج</h1>
+        <p style="margin: 0;">العميل: <strong>{{ rental.client_name }}</strong></p>
+    </div>
+
+    <div class="glass-card">
+        <form method="POST">
+            <label class="text-muted">المبلغ المدفوع الآن</label>
+            <input type="number" name="amount" placeholder="أدخل المبلغ..." step="0.01" required style="font-size: 20px; font-weight: bold;">
+
+            <label class="text-muted">طريقة الدفع</label>
+            <select name="payment_method">
+                <option value="كاش">كاش 💵</option>
+                <option value="فودافون كاش">فودافون كاش 📱</option>
+                <option value="انستا باي">انستا باي 🏦</option>
+            </select>
+
+            <button type="submit" class="btn btn-success" style="margin-top: 20px;">
+                <i class="fa-solid fa-money-bill-1-wave"></i> تسجيل الدفعة
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

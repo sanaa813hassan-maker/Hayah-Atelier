@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">مسحوبات ملاك</h2>
+    <form method="POST">
+        <div class="glass-card">
+            <label class="text-muted">اسم الشريك</label>
+            <select name="owner_name">{% for owner in owners %}<option value="{{ owner.employee_name }}">{{ owner.employee_name }}</option>{% endfor %}</select>
+            <label class="text-muted">المبلغ</label>
+            <input type="number" name="amount" placeholder="المبلغ..." required style="font-weight: bold;">
+            <label class="text-muted">بيان</label>
+            <input type="text" name="reason" placeholder="سبب السحب...">
+        </div>
+        <button type="submit" class="btn btn-accent">تسجيل السحب</button>
+    </form>
+</div>
+{% endblock %}
