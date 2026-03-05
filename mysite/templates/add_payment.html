@@ -25,6 +25,12 @@
                 <i class="fa-solid fa-money-bill" style="position: absolute; right: 15px; top: 15px; color: var(--success);"></i>
                 <input type="number" name="amount_paid" placeholder="المبلغ..." required style="padding-right: 45px; font-weight: bold;">
             </div>
+
+            <label class="text-muted">تاريخ الصرف</label>
+            <div style="position: relative;">
+                <i class="fa-solid fa-calendar-day" style="position: absolute; right: 15px; top: 15px; color: var(--text-secondary);"></i>
+                <input type="date" name="payment_date" value="{{ today }}" required style="padding-right: 45px;">
+            </div>
         </div>
 
         <button type="submit" class="btn btn-success">

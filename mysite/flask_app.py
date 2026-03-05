@@ -423,11 +423,11 @@ def add_payment():
     if not is_manager(): return redirect(url_for('index'))
     if request.method == 'POST':
         d = read_data('payments')
-        d.append({'employee_name': request.form['employee_name'], 'amount_paid': request.form['amount_paid'], 'date': get_today_date()})
+        d.append({'employee_name': request.form['employee_name'], 'amount_paid': request.form['amount_paid'], 'date': request.form['payment_date']})
         write_data('payments', d)
         send_telegram_message(f"💰 *صرف راتب*\nالموظف: {request.form['employee_name']}\nالمبلغ: {request.form['amount_paid']}")
         return redirect(url_for('employees_menu'))
-    return render_template('add_payment.html', employees=read_data('employees'))
+    return render_template('add_payment.html', employees=read_data('employees'), today=get_today_date())
 @app.route('/attendance', methods=['GET', 'POST'])
 def manage_attendance():
     if not is_manager(): return redirect(url_for('index'))
