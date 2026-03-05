@@ -23,10 +23,15 @@ app.secret_key = 'hayah_atelier_secret_key_12345'
 
 # --- 2. إعداد قاعدة البيانات ---
 # This section is modified to use the DATABASE_URL environment variable,
-# which is standard for hosting platforms like Render.
+# which is standard for hosting platforms like Vercel.
 db_uri = os.environ.get('DATABASE_URL')
 if not db_uri:
     raise RuntimeError("FATAL: The DATABASE_URL environment variable is not set. Please set it in your hosting environment settings.")
+
+# Vercel/Heroku use "postgres://" but SQLAlchemy needs "postgresql://"
+if db_uri.startswith("postgres://"):
+    db_uri = db_uri.replace("postgres://", "postgresql://", 1)
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
