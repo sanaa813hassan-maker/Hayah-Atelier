@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">أداء الموظفين والرواتب</h2>
+
+    {% for name, data in employees.items() %}
+    <div class="glass-card" style="position: relative; overflow: hidden;">
+
+        <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 5px;
+             background: {{ 'var(--accent-pink)' if data.employee_type == 'Owner' else 'var(--primary-color)' }};">
+        </div>
+
+        <div style="margin-right: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0;">
+                    <i class="fa-solid fa-user-tie" style="color: var(--text-secondary); margin-left: 8px;"></i>
+                    {{ name }}
+                </h3>
+                <span style="font-size: 11px; padding: 4px 10px; border-radius: 15px;
+                      background: rgba(255,255,255,0.1); color: var(--text-secondary);">
+                    {{ 'شريك / مالك' if data.employee_type == 'Owner' else 'موظف' }}
+                </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; text-align: center;">
+                    <div style="color: var(--text-secondary); font-size: 11px;">عدد الحجوزات</div>
+                    <div style="font-weight: bold; font-size: 18px;">{{ data.rentals_count }}</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; text-align: center;">
+                    <div style="color: var(--text-secondary); font-size: 11px;">إجمالي المبيعات</div>
+                    <div style="font-weight: bold; font-size: 18px; color: var(--success);">{{ data.rentals_value }} ج</div>
+                </div>
+            </div>
+
+            {% if data.employee_type == 'Employee' %}
+            <div style="border-top: 1px solid var(--glass-border); padding-top: 10px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span class="text-muted">الراتب الأساسي</span>
+                    <span>{{ data.base_salary }} ج</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span class="text-muted">مدفوعات سابقة</span>
+                    <span style="color: var(--success);">-{{ data.total_paid }} ج</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span class="text-muted">خصومات / جزاءات</span>
+                    {% if data.total_deductions > 0 %}
+                        <a href="{{ url_for('deductions_report', employee_name=name) }}" style="color: var(--danger); text-decoration: underline;">
+                            -{{ data.total_deductions }} ج (التفاصيل)
+                        </a>
+                    {% else %}
+                        <span>0 ج</span>
+                    {% endif %}
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span class="text-muted">أيام الغياب</span>
+                    <span style="{{ 'color: var(--danger); font-weight:bold;' if data.absent_days > 0 else '' }}">
+                        {{ data.absent_days }} أيام
+                    </span>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                    <span style="font-size: 14px;">المتبقي له:</span>
+                    <span style="font-size: 20px; font-weight: bold; color: {{ 'var(--success)' if data.remaining_salary > 0 else 'white' }};">
+                        {{ data.remaining_salary }} ج
+                    </span>
+                </div>
+            </div>
+            {% else %}
+            <div style="border-top: 1px solid var(--glass-border); padding-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="text-muted">إجمالي المسحوبات</span>
+                    <span style="color: var(--accent-pink); font-weight: bold; font-size: 18px;">{{ data.total_withdrawals }} ج</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <div style="text-align: left; margin-top: 15px;">
+                <a href="{{ url_for('confirm_delete_employee', employee_name=name) }}" style="color: var(--danger); font-size: 12px;">
+                    <i class="fa-solid fa-trash"></i> حذف من السيستم
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

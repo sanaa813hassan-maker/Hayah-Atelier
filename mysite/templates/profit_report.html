@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">تحليل الأرباح</h2>
+
+    <div class="glass-card" style="text-align: center;">
+        <h4 style="margin-bottom: 15px;">توزيع السيولة (كاش / ديجيتال)</h4>
+        <div style="max-width: 250px; margin: 0 auto;">
+            <canvas id="paymentChart"></canvas>
+        </div>
+    </div>
+
+    <div class="glass-card" style="text-align: center; background: linear-gradient(135deg, rgba(50, 215, 75, 0.3), rgba(0, 0, 0, 0.6)); border: 1px solid var(--success); margin-top: 20px;">
+        <p style="color: var(--text-secondary); margin: 0;">صافي الربح القابل للتوزيع</p>
+        <h1 style="font-size: 45px; color: #fff; margin: 10px 0;">{{ report.distributable_profit }} <span style="font-size: 20px;">ج</span></h1>
+        <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 10px; font-size: 12px;">
+            نصيب الشريك: {{ report.partner_share }} ج
+        </span>
+    </div>
+</div>
+
+<script>
+    // تشغيل الرسم البياني بعد تحميل الصفحة
+    window.addEventListener('load', function() {
+        const ctx = document.getElementById('paymentChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['كاش', 'فودافون', 'انستا'],
+                datasets: [{
+                    data: [{{ chart_data.cash }}, {{ chart_data.voda }}, {{ chart_data.insta }}],
+                    backgroundColor: ['#32D74B', '#FF453A', '#BF5AF2'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { color: 'white', font: { family: 'Cairo' } } } }
+            }
+        });
+    });
+</script>
+{% endblock %}

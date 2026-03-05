@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">إضافة فرد جديد للطاقم</h2>
+
+    <form method="POST">
+        <div class="glass-card">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-user-plus" style="font-size: 40px; color: var(--primary-color);"></i>
+            </div>
+
+            <label class="text-muted">الاسم الثلاثي</label>
+            <input type="text" name="employee_name" placeholder="اسم الموظف / الشريك" required>
+
+            <label class="text-muted">الراتب الأساسي (للموظفين فقط)</label>
+            <input type="number" name="base_salary" placeholder="0 إذا كان شريك" value="0">
+
+            <label class="text-muted">الصفة (الدور)</label>
+            <select name="employee_type">
+                <option value="Employee">موظف (راتب + حضور)</option>
+                <option value="Owner">مالك/شريك (مسحوبات فقط)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-check"></i> حفظ البيانات
+        </button>
+    </form>
+</div>
+{% endblock %}

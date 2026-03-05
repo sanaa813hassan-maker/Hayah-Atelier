@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">تسجيل استلام (خروج الفستان)</h2>
+
+    <div class="glass-card" style="border-right: 4px solid var(--accent-pink); padding: 20px;">
+        <h3 style="margin: 0; color: white;">{{ rental.dress_name }}</h3>
+        <p class="text-muted" style="margin: 5px 0 0 0;">للعميل: <strong>{{ rental.client_name }}</strong></p>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="card_deposit" value="نعم">
+
+        <div class="glass-card">
+            <div style="margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;">
+                <label class="text-muted" style="display:block; margin-bottom:8px;">1. مبلغ التأمين</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" name="insurance_amount" placeholder="المبلغ..." style="font-weight:bold; flex: 1;" required>
+
+                    <select name="insurance_method" style="flex: 1;">
+                        <option value="كاش">كاش 💵</option>
+                        <option value="فودافون كاش">فودافون 📱</option>
+                        <option value="انستا باي">انستا 🏦</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label class="text-muted" style="display:block; margin-bottom:8px;">2. البطاقة الشخصية</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-id-card" style="position: absolute; right: 15px; top: 15px; color: var(--accent-pink);"></i>
+                    <input type="text" name="card_holder_name" placeholder="اسم صاحب البطاقة..." style="padding-right: 45px;" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <label class="text-muted">ملاحظات الخروج</label>
+            <textarea name="pickup_notes" rows="3" placeholder="حالة الفستان..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="font-size: 18px;">
+            <i class="fa-solid fa-check-double"></i> تأكيد الاستلام
+        </button>
+    </form>
+</div>
+{% endblock %}

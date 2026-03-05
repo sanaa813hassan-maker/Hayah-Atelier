@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">مصروفات تشغيل</h2>
+
+    <form method="POST">
+        <div class="glass-card">
+
+            <label class="text-muted">بند الصرف</label>
+            <input type="text" name="description" placeholder="مثال: فاتورة كهرباء، ضيافة، أدوات..." required>
+
+            <label class="text-muted">التكلفة</label>
+            <div style="position: relative;">
+                <input type="number" name="amount" placeholder="المبلغ..." required style="padding-right: 40px; color: var(--danger);">
+                <span style="position: absolute; right: 15px; top: 15px; color: var(--text-secondary);">ج.م</span>
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-danger" style="background: #FF453A;">
+            <i class="fa-solid fa-receipt"></i> تسجيل المصروف
+        </button>
+    </form>
+</div>
+{% endblock %}

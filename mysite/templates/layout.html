@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أتيليه حياه | HAYAH Atelier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg-deep: #000000; --bg-gradient: radial-gradient(circle at 50% 0%, #1a0b2e 0%, #000000 60%); --glass-surface: rgba(20, 20, 20, 0.75); --glass-border: rgba(255, 255, 255, 0.1); --primary-color: #0A84FF; --accent-pink: #d450ea; --text-primary: #FFFFFF; --text-secondary: #98989e; --danger: #FF453A; --success: #32D74B; --warning: #FF9F0A; --radius-lg: 22px; --font-stack: "Cairo", sans-serif; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; font-family: var(--font-stack); background-color: var(--bg-deep); background-image: var(--bg-gradient); background-attachment: fixed; color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
+        h1, h2, h3 { font-weight: 700; margin-top: 0; } a { text-decoration: none; color: inherit; }
+        .glass-card { background: var(--glass-surface); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); margin-bottom: 16px; position: relative; transition: 0.2s; }
+        .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .app-icon-card { background: rgba(40, 40, 40, 0.6); border: 1px solid var(--glass-border); border-radius: 25px; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; aspect-ratio: 1/1; color: white; }
+        .app-icon-card i { font-size: 40px !important; margin-bottom: 12px; }
+        .app-icon-card span { font-size: 15px !important; font-weight: bold; }
+        input, select, textarea { width: 100%; background: rgba(255, 255, 255, 0.12); border: none; border-radius: 12px; padding: 14px; color: white; font-size: 16px; font-family: var(--font-stack); margin-bottom: 10px; }
+        .btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 14px; font-weight: 600; color: white; border: none; cursor: pointer; width: 100%; margin-top: 10px; }
+        .btn-primary { background: var(--primary-color); } .btn-danger { background: var(--danger); }
+        .nav-island { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 380px; background: rgba(30, 30, 30, 0.95); backdrop-filter: blur(30px); border-radius: 35px; border: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; padding: 15px 25px; z-index: 1000; }
+        .nav-item { color: #888; font-size: 11px; display: flex; flex-direction: column; align-items: center; } .nav-item.active { color: white; }
+        .nav-item i { font-size: 28px !important; margin-bottom: 5px; }
+        .nav-item.active i { color: var(--accent-pink); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 2000; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .qr-modal-content { background: white; padding: 25px; border-radius: 30px; transform: scale(0.5); transition: 0.4s; text-align: center; }
+        .modal-overlay.active .qr-modal-content { transform: scale(1); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; direction: rtl; }
+        .cal-day { height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 14px; margin-bottom: 2px; }
+        .cal-day.today { background: var(--primary-color); color: white; } .cal-day.has-event { border: 1px solid var(--accent-pink); background: rgba(212, 80, 234, 0.15); }
+        .fade-in { animation: fadeIn 0.6s ease forwards; opacity: 0; transform: translateY(15px); } @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <header style="padding: 30px; text-align: center;"><div style="font-size: 26px; font-weight: 700;">HAYAH <span>Atelier</span></div></header>
+    <div class="container" style="padding: 0 20px 120px;">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for c, m in messages %}
+        <div class="glass-card fade-in" style="border-right: 4px solid {{ '#32D74B' if c=='success' else '#FF453A' }}; padding: 15px;">{{ m }}</div>
+        {% endfor %} {% endif %} {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <nav class="nav-island">
+        <a href="{{ url_for('index') }}" class="nav-item {{ 'active' if request.endpoint == 'index' }}"><i class="fa-solid fa-house"></i><span>الرئيسية</span></a>
+        <a href="{{ url_for('add_rental') }}" class="nav-item {{ 'active' if request.endpoint == 'add_rental' }}"><i class="fa-solid fa-circle-plus"></i><span>حجز</span></a>
+        <a href="{{ url_for('calendar_view') }}" class="nav-item {{ 'active' if request.endpoint == 'calendar_view' }}"><i class="fa-regular fa-calendar-days"></i><span>الجدول</span></a>
+        {% if session.get('role') == 'manager' %}
+        <a href="{{ url_for('reports_menu') }}" class="nav-item {{ 'active' if request.endpoint == 'reports_menu' }}"><i class="fa-solid fa-chart-pie"></i><span>تقارير</span></a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}" class="nav-item"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>خروج</span></a>
+    </nav>
+    <div id="qrModal" class="modal-overlay" onclick="this.classList.remove('active')">
+        <div class="qr-modal-content" onclick="event.stopPropagation()">
+            <div id="modalQrImage"></div>
+            <p id="modalQrText" style="color: black; margin-top: 15px; font-weight: bold;"></p>
+        </div>
+    </div>
+    <script>
+        function openQrModal(id, text) {
+            document.getElementById('modalQrImage').innerHTML = '';
+            new QRCode(document.getElementById('modalQrImage'), { text: text, width: 200, height: 200 });
+            document.getElementById('modalQrText').innerText = text.split('|')[0];
+            document.getElementById('qrModal').classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0;">سجل المصروفات</h2>
+        <a href="{{ url_for('add_expense') }}" class="btn btn-danger" style="width: auto; padding: 10px 15px;">
+            <i class="fa-solid fa-minus"></i>
+        </a>
+    </div>
+
+    {% if expenses|length == 0 %}
+        <div style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
+            <p>لا توجد مصروفات مسجلة.</p>
+        </div>
+    {% else %}
+        {% for expense in expenses %}
+        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+            <div>
+                <h4 style="margin: 0 0 5px 0;">{{ expense.description }}</h4>
+                <span style="font-size: 12px; color: var(--text-secondary);">{{ expense.date }}</span>
+            </div>
+            <div style="text-align: left;">
+                <div style="font-weight: bold; color: var(--danger); margin-bottom: 5px;">-{{ expense.amount }} ج</div>
+                <form action="{{ url_for('delete_expense', expense_id=expense.expense_id) }}" method="POST" onsubmit="return confirm('حذف؟');">
+                    <button type="submit" style="background: none; border: none; color: var(--text-secondary); cursor: pointer;">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

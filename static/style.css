@@ -1,0 +1,155 @@
+/* --- HAYAH iOS 26 Theme (Midnight Glass) --- */
+
+:root {
+    --bg-deep: #000000;
+    --bg-gradient: radial-gradient(circle at 50% 10%, #2c003e 0%, #000000 40%);
+    --glass-surface: rgba(30, 30, 30, 0.60);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --primary-color: #0A84FF; /* iOS Blue */
+    --accent-pink: #BF5AF2;   /* iOS Purple/Pink for Atelier vibe */
+    --text-primary: #FFFFFF;
+    --text-secondary: #8E8E93;
+    --danger: #FF453A;
+    --success: #32D74B;
+    --radius-lg: 22px;
+    --radius-sm: 12px;
+    --font-stack: "Cairo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* إزالة الوميض عند اللمس */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-stack);
+    background-color: var(--bg-deep);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed; /* الخلفية ثابتة */
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- Glassmorphism Container --- */
+.glass-card {
+    background: var(--glass-surface);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-card:active {
+    transform: scale(0.98); /* تأثير الضغط */
+}
+
+/* --- Typography --- */
+h1, h2, h3 {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-top: 0;
+}
+
+.text-muted { color: var(--text-secondary); }
+
+/* --- Inputs (iOS Style) --- */
+input, select, textarea {
+    width: 100%;
+    background: rgba(118, 118, 128, 0.24);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 17px;
+    font-family: var(--font-stack);
+    margin-bottom: 15px;
+    transition: background 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    background: rgba(118, 118, 128, 0.4);
+    box-shadow: 0 0 0 2px var(--accent-pink);
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 14px 24px;
+    border-radius: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    font-size: 17px;
+    transition: all 0.2s ease;
+    width: 100%; /* Mobile first */
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(10, 132, 255, 0.4);
+}
+
+.btn-accent {
+    background: linear-gradient(135deg, #BF5AF2, #FF375F);
+    color: white;
+    box-shadow: 0 4px 15px rgba(191, 90, 242, 0.4);
+}
+
+.btn-danger { background: var(--danger); color: white; }
+.btn-success { background: var(--success); color: white; }
+
+.btn:active { transform: scale(0.96); opacity: 0.9; }
+
+/* --- Navigation (Floating Island) --- */
+.nav-island {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background: rgba(40, 40, 40, 0.85);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 35px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.nav-item {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.nav-item i { font-size: 24px; margin-bottom: 4px; }
+.nav-item.active { color: var(--primary-color); }
+
+/* --- Tables (Converted to Cards for Mobile) --- */
+table { width: 100%; border-collapse: collapse; color: white; }
+th { text-align: right; color: var(--text-secondary); padding: 10px; border-bottom: 1px solid var(--glass-border); }
+td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+/* Hide heavy elements on small screens if needed */
+@media (max-width: 600px) {
+    .desktop-only { display: none; }
+}

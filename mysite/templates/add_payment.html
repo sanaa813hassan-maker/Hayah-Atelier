@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">صرف دفعة راتب</h2>
+
+    <form method="POST">
+        <div class="glass-card">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-hand-holding-dollar" style="font-size: 40px; color: var(--success);"></i>
+            </div>
+
+            <label class="text-muted">اختر الموظف</label>
+            <div style="position: relative;">
+                <i class="fa-solid fa-user" style="position: absolute; right: 15px; top: 15px; color: var(--text-secondary);"></i>
+                <select name="employee_name" style="padding-right: 45px;">
+                    {% for emp in employees %}
+                    <option value="{{ emp.employee_name }}">{{ emp.employee_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <label class="text-muted">مبلغ الدفعة</label>
+            <div style="position: relative;">
+                <i class="fa-solid fa-money-bill" style="position: absolute; right: 15px; top: 15px; color: var(--success);"></i>
+                <input type="number" name="amount_paid" placeholder="المبلغ..." required style="padding-right: 45px; font-weight: bold;">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            <i class="fa-solid fa-paper-plane"></i> تسجيل الصرف
+        </button>
+    </form>
+</div>
+{% endblock %}

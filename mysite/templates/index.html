@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="margin: 0; font-size: 28px;">الحجوزات الحالية</h1>
+    <a href="{{ url_for('add_rental') }}" class="btn btn-primary" style="width: auto; padding: 10px 15px;">
+        <i class="fa-solid fa-plus"></i> حجز جديد
+    </a>
+</div>
+
+<div class="glass-card" style="padding: 10px; margin-bottom: 25px;">
+    <form method="GET" action="{{ url_for('index') }}" style="position: relative;">
+        <i class="fa-solid fa-magnifying-glass" style="position: absolute; right: 15px; top: 15px; color: var(--text-secondary);"></i>
+        <input type="text" name="query"
+               placeholder="بحث (اسم العميل، الفستان، الرقم)..."
+               value="{{ search_query if search_query }}"
+               style="padding-right: 40px; margin-bottom: 0;">
+    </form>
+</div>
+
+{% if rentals|length == 0 %}
+    <div style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
+        <i class="fa-regular fa-folder-open" style="font-size: 50px; margin-bottom: 15px;"></i>
+        <p>لا توجد حجوزات حالياً...</p>
+    </div>
+{% else %}
+
+    {% for rental in rentals %}
+    <div class="glass-card fade-in" style="position: relative; overflow: hidden;">
+
+        <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 6px;
+             background: {{ 'var(--success)' if rental.status == 'تم الاستلام' else 'var(--accent-pink)' }};">
+        </div>
+
+        <div style="margin-right: 15px;"> <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                <div>
+                    <h3 style="margin: 0; font-size: 18px; color: white;">{{ rental.client_name }}</h3>
+                    <span style="font-size: 12px; color: var(--text-secondary);">
+                        <i class="fa-solid fa-phone"></i> {{ rental.phone }}
+                    </span>
+                </div>
+
+                <span style="
+                    font-size: 11px;
+                    padding: 4px 8px;
+                    border-radius: 20px;
+                    background: {{ 'rgba(50, 215, 75, 0.2)' if rental.status == 'تم الاستلام' else 'rgba(191, 90, 242, 0.2)' }};
+                    color: {{ 'var(--success)' if rental.status == 'تم الاستلام' else 'var(--accent-pink)' }};
+                    border: 1px solid {{ 'var(--success)' if rental.status == 'تم الاستلام' else 'var(--accent-pink)' }};
+                ">
+                    {{ rental.status }}
+                </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px;">
+                    <span style="color: var(--text-secondary); font-size: 10px; display: block;">الفستان</span>
+                    <span style="font-size: 14px;"><i class="fa-solid fa-shirt"></i> {{ rental.dress_name }}</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px;">
+                    <span style="color: var(--text-secondary); font-size: 10px; display: block;">تاريخ المناسبة</span>
+                    <span style="font-size: 14px; color: white;"><i class="fa-regular fa-calendar"></i> {{ rental.due_date }}</span>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; margin-bottom: 15px;">
+                <div>
+                    <span style="color: var(--text-secondary); font-size: 12px;">الإجمالي</span>
+                    <div style="font-weight: bold;">{{ rental.total_price }} ج</div>
+                </div>
+                <div>
+                    <span style="color: var(--text-secondary); font-size: 12px;">المدفوع</span>
+                    <div style="color: var(--success);">{{ rental.total_paid_display }} ج</div>
+                </div>
+                <div>
+                    <span style="color: var(--text-secondary); font-size: 12px;">المتبقي</span>
+                    <div style="color: {{ 'var(--danger)' if rental.remaining_balance > 0 else 'var(--text-secondary)' }}; font-weight: bold;">
+                        {{ rental.remaining_balance }} ج
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+                <a href="{{ url_for('edit_rental', rental_id=rental.rental_id) }}" class="btn" style="background: rgba(255,255,255,0.1); font-size: 13px; padding: 10px; flex: 1;">
+                    <i class="fa-solid fa-pen"></i> تعديل
+                </a>
+
+                {% if rental.remaining_balance > 0 %}
+                <a href="{{ url_for('add_installment', rental_id=rental.rental_id) }}" class="btn" style="background: var(--primary-color); font-size: 13px; padding: 10px; flex: 1;">
+                    <i class="fa-solid fa-money-bill-wave"></i> قسط
+                </a>
+                {% endif %}
+
+                {% if rental.status != 'تم الاستلام' %}
+                <a href="{{ url_for('record_pickup', rental_id=rental.rental_id) }}" class="btn" style="background: var(--accent-pink); font-size: 13px; padding: 10px; flex: 1;">
+                    <i class="fa-solid fa-check-double"></i> استلام
+                </a>
+                {% endif %}
+
+                {% if is_manager %}
+                <form action="{{ url_for('delete_rental', rental_id=rental.rental_id) }}" method="POST" style="display:inline; flex: 0.3;" onsubmit="return confirm('هل أنت متأكد من حذف هذا الحجز؟');">
+                    <button type="submit" class="btn btn-danger" style="width: 100%; padding: 10px;"><i class="fa-solid fa-trash"></i></button>
+                </form>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+
+{% endif %}
+
+<div style="height: 80px;"></div>
+
+{% endblock %}

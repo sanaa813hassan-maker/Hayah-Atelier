@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 style="text-align: center; margin-bottom: 20px;">شؤون الطاقم والملاك</h2>
+
+    <div class="app-grid">
+
+        <a href="{{ url_for('manage_attendance') }}" class="app-icon-card">
+            <div style="color: #30D158;"><i class="fa-regular fa-calendar-check"></i></div>
+            <span style="margin-top:10px; font-size:13px;">تسجيل حضور</span>
+        </a>
+
+        <a href="{{ url_for('add_payment') }}" class="app-icon-card">
+            <div style="color: #FFD60A;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+            <span style="margin-top:10px; font-size:13px;">صرف راتب</span>
+        </a>
+
+        <a href="{{ url_for('add_deduction') }}" class="app-icon-card">
+            <div style="color: #FF453A;"><i class="fa-solid fa-file-circle-minus"></i></div>
+            <span style="margin-top:10px; font-size:13px;">خصم / جزاء</span>
+        </a>
+
+        <a href="{{ url_for('add_withdrawal') }}" class="app-icon-card">
+            <div style="color: #BF5AF2;"><i class="fa-solid fa-wallet"></i></div>
+            <span style="margin-top:10px; font-size:13px;">سحب مالك</span>
+        </a>
+
+        <a href="{{ url_for('add_employee') }}" class="app-icon-card">
+            <div style="color: #64D2FF;"><i class="fa-solid fa-user-plus"></i></div>
+            <span style="margin-top:10px; font-size:13px;">موظف جديد</span>
+        </a>
+
+        <a href="{{ url_for('info_page') }}" class="app-icon-card" style="border: 1px solid #00f2ea;">
+            <div style="color: #00f2ea;"><i class="fa-solid fa-circle-info"></i></div>
+            <span style="margin-top:10px; font-size:13px;">أرقام وكتالوج</span>
+        </a>
+
+        <a href="{{ url_for('download_backup') }}" class="app-icon-card" style="border-color: var(--text-secondary);">
+            <div style="color: white;"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+            <span style="margin-top:10px; font-size:13px;">نسخة احتياطية</span>
+        </a>
+
+    </div>
+</div>
+{% endblock %}

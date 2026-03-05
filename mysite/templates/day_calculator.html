@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}حاسبة اليوم{% endblock %}
+
+{% block content %}
+<h2 class="text-center mt-4 mb-4">📊 حاسبة اليوم</h2>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('day_calculator') }}">
+            <div class="form-group">
+                <label for="selected_date"><strong>اختر التاريخ:</strong></label>
+                <input type="date" class="form-control text-right" id="selected_date" name="selected_date" value="{{ selected_date }}">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-calculator"></i> حساب
+            </button>
+        </form>
+    </div>
+</div>
+
+{% if request.method == 'POST' %}
+<hr>
+<h3 class="text-center">نتائج يوم: <span class="badge badge-secondary">{{ selected_date }}</span></h3>
+
+<div class="row text-center mt-4">
+    <div class="col-12">
+        <div class="card bg-success text-white mb-3">
+            <div class="card-body">
+                <h5 class="card-title">إجمالي الإيراد (عرابين + أقساط)</h5>
+                <h2 class="display-4">{{ "%.2f"|format(report.total) }} ج</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-4">
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <h5 class="card-title">كاش 💵</h5>
+                <h4>{{ "%.2f"|format(report.cash) }} ج</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <h5 class="card-title">فودافون كاش 📱</h5>
+                <h4>{{ "%.2f"|format(report.voda) }} ج</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <h5 class="card-title">انستا باي 🏦</h5>
+                <h4>{{ "%.2f"|format(report.insta) }} ج</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row text-center">
+     <div class="col-6">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">عدد الحجوزات (عرابين)</h5>
+                <h3>{{ report.rentals_count }}</h3>
+            </div>
+        </div>
+    </div>
+     <div class="col-6">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">عدد الأقساط (دفعات)</h5>
+                <h3>{{ report.installments_count }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
