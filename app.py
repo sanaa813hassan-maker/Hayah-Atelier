@@ -22,11 +22,11 @@ app = Flask(__name__, template_folder='mysite/templates', static_folder='mysite/
 app.secret_key = 'hayah_atelier_secret_key_12345'
 
 # --- 2. إعداد قاعدة البيانات ---
-# This section is modified to fail loudly if the database URL isn't set,
-# which is a requirement for read-only filesystems like Cloudflare Pages.
-db_uri = os.environ.get('POSTGRES_URL')
+# This section is modified to use the DATABASE_URL environment variable,
+# which is standard for hosting platforms like Render.
+db_uri = os.environ.get('DATABASE_URL')
 if not db_uri:
-    raise RuntimeError("FATAL: The POSTGRES_URL environment variable is not set. Please set it in the Cloudflare Pages dashboard.")
+    raise RuntimeError("FATAL: The DATABASE_URL environment variable is not set. Please set it in your hosting environment settings.")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
