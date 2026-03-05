@@ -25,9 +25,15 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 app.secret_key = 'hayah_atelier_secret_key_12345'
 
 # --- 2. إعداد قاعدة البيانات ---
-# يتم جلب رابط قاعدة البيانات من متغيرات البيئة في Vercel
-# للتجربة المحلية، سيتم إنشاء ملف قاعدة بيانات sqlite
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('POSTGRES_URL', f"sqlite:///{os.path.join(base_dir, 'local_database.db')}")
+db_uri = os.environ.get('POSTGRES_URL')
+if not db_uri:
+    if os.environ.get('VERCEL'):
+        raise RuntimeError("FATAL: The POSTGRES_URL environment variable is not set on Vercel.")
+    else:
+        print("WARNING: POSTGRES_URL not found. Falling back to local SQLite database.")
+        db_uri = f"sqlite:///{os.path.join(base_dir, 'local_database.db')}"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -37,7 +43,11 @@ TELEGRAM_CHAT_IDS = ["7075915087", "5267495549"]
 UPLOAD_FOLDER = os.path.join(static_dir, 'dress_images')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
+
+# On Vercel, the filesystem is read-only, so we can't create directories at runtime.
+if not os.environ.get('VERCEL'):
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
 
 # --- 4. نماذج قاعدة البيانات (Data Models) ---
 
