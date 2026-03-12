@@ -6,11 +6,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 # --- 1. إعداد التطبيق والمسارات ---
-app = Flask(__name__, template_folder='mysite/templates', static_folder='mysite/static')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key = 'hayah_atelier_secret_key_simple'
 
 # Use the 'data' directory inside 'mysite' for storing JSON files
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'mysite', 'data')
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
